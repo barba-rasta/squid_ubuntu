@@ -1,4 +1,22 @@
 #!/bin/bash
+fun_bar () {
+local pid=$!
+local delay=0.25
+local spinner=( '█■■■■' '■█■■■' '■■█■■' '■■■█■' '■■■■█' )
+while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+for i in "${spinner[@]}"
+do
+tput civis
+echo -ne "[34m [*] \e[37m DESCARGANDO \e[31m[[32m$i[31m][0m   ";
+sleep $delay
+printf "";
+done
+done
+printf "   "
+tput cnorm
+printf "[1;31m[[1;33mINSTALADO[1;31m]\e[0m"
+echo "";
+}
 declare -A cor=( [0]="\033[1;37m" [1]="\033[1;31m" [2]="\033[1;32m" [6]="\033[1;36m" [4]="\033[1;31m" )
 #LISTA PORTAS
 mportas () {
@@ -23,7 +41,7 @@ echo -e "\e[1;34m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 msg_bra='echo -e "\033[1;33m'
 
 
-fun_bar () {
+bar () {
 comando[0]="$1"
 comando[1]="$2"
  (
